@@ -1,4 +1,8 @@
-function [intPolygon] = intersectPolygons ( polygons )
+function [intPolygon, tooFar] = intersectPolygons ( polygons )
+    %This function returns the intersection polygon between two polygons.
+    %Notice that if no intersection is found (polygons separated) or only
+    %one intersection is found (polygons touch each other on a vertex) then
+    %a null intPolygon is returned and tooFar 
     %1. Extract lines from polygons
     lines = [];
     ranges = [];
@@ -83,21 +87,27 @@ function [intPolygon] = intersectPolygons ( polygons )
     end
      
     %6. Order the vertices and form the polygon structure
-    in = size(coords,1);
-    x = reshape(coords(:,1,1),in,1);
-    y = reshape(coords(:,1,2),in,1);
-    %Remove repeated items
-    coords = unique([x,y],'rows');
-    x = coords(:,1);
-    y = coords(:,2);
-    [ord, ord] = sort([angle(complex(x-mean(x),y-mean(y)))]);
-    coords=[x(ord),y(ord)];
-    intPolygon.coords = coords;
-    % whichever order as intersection polygon will never be used for
-    % standing
-    intPolygon.feet = ord;
-    intPolygon.A = areaPolygon2D ( intPolygon );
-    [intPolygon.centroid(1,1), intPolygon.centroid(2,1), intPolygon.centroid(3,1),intPolygon.centroid(4,1)] = centroidPolygon2D ( intPolygon );
-
+    % IF NO INTERSECTION: RETURN A VOID STRUCTURE AND RAISE FARAWAY FLAG
+    if size(coords,1) == 0 || size(coords,1) == 1
+        intPolygon = 0;
+        tooFar = 1;
+    else
+        in = size(coords,1);
+        x = reshape(coords(:,1,1),in,1);
+        y = reshape(coords(:,1,2),in,1);
+        %Remove repeated items
+        coords = unique([x,y],'rows');
+        x = coords(:,1);
+        y = coords(:,2);
+        [ord, ord] = sort([angle(complex(x-mean(x),y-mean(y)))]);
+        coords=[x(ord),y(ord)];
+        intPolygon.coords = coords;
+        % whichever order as intersection polygon will never be used for
+        % standing
+        intPolygon.feet = ord;
+        intPolygon.A = areaPolygon2D ( intPolygon );
+        [intPolygon.centroid(1,1), intPolygon.centroid(2,1), intPolygon.centroid(3,1),intPolygon.centroid(4,1)] = centroidPolygon2D ( intPolygon );
+        tooFar = 0;
+    end
     
 end

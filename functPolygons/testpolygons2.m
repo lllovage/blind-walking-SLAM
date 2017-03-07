@@ -11,7 +11,7 @@ polygon2.A = areaPolygon2D ( polygon2 );
 % Merge polygons
 polygons = [polygon1; polygon2];
 % Obtain intersection
-intPolygon = intersectPolygons(polygons);
+[intPolygon, tooFar] = intersectPolygons(polygons);
 %% EXPERIMENT 3
 clc; clear;
 % Define first polygon (triangle)
@@ -27,7 +27,7 @@ polygon2.A = areaPolygon2D ( polygon2 );
 % Merge polygons
 polygons = [polygon1; polygon2];
 % Obtain intersection
-intPolygon = intersectPolygons(polygons);
+[intPolygon, tooFar] = intersectPolygons(polygons);
 %% EXPERIMENT 4
 clc; clear;
 % Define first polygon (triangle)
@@ -43,7 +43,7 @@ polygon2.A = areaPolygon2D ( polygon2 );
 % Merge polygons
 polygons = [polygon1; polygon2];
 % Obtain intersection
-intPolygon = intersectPolygons(polygons);
+[intPolygon, tooFar] = intersectPolygons(polygons);
 %% EXPERIMENT 5
 clc; clear;
 % Define first polygon (triangle)
@@ -59,7 +59,7 @@ polygon2.A = areaPolygon2D ( polygon2 );
 % Merge polygons
 polygons = [polygon1; polygon2];
 % Obtain intersection
-intPolygon = intersectPolygons(polygons);
+[intPolygon, tooFar] = intersectPolygons(polygons);
 %% EXPERIMENT 6
 clc; clear;
 % Define first polygon (triangle)
@@ -75,4 +75,19 @@ polygon2.A = areaPolygon2D ( polygon2 );
 % Merge polygons
 polygons = [polygon1; polygon2];
 % Obtain intersection
-intPolygon = intersectPolygons(polygons);
+[intPolygon, tooFar] = intersectPolygons(polygons);
+%% EXPERIMENT 7
+% Define first polygon (triangle)
+polygon1.feet = [1;2;3];
+polygon1.coords = [1,2;3,2;2,4];
+polygon1.A = areaPolygon2D ( polygon1 );
+[polygon1.cent(1,1), polygon1.cent(2,1), polygon1.cent(3,1),polygon1.cent(4,1)] = centroidPolygon2D ( polygon1 );
+% Define second polygon (triangle)
+polygon2.feet = [1;2;3];
+polygon2.coords = [5,2;6,4;4,4];
+polygon2.A = areaPolygon2D ( polygon2 );
+[polygon2.cent(1,1), polygon2.cent(2,1), polygon2.cent(3,1),polygon2.cent(4,1)] = centroidPolygon2D ( polygon2 );
+% Merge polygons
+polygons = [polygon1; polygon2];
+% Obtain intersection
+[intPolygon, tooFar] = intersectPolygons(polygons);
