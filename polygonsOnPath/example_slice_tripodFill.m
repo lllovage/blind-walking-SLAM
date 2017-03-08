@@ -2,7 +2,7 @@
 
 %% Example 1:
 clear;clc;
-stride = 0.25; % In meters
+stride = 0.25; % In meters-----------------------------------------------
 timeRes = 0.0001;   % In seconds
 %completePath.xParams = [1 1]';
 %completePath.yParams = [1 1]';
@@ -16,7 +16,7 @@ showSliced(completePath,slicedPath)
 % Fill in slicedPath wth tripods
 options.default.ON = 1;
 options.default.gait = 'tripod';
-options.default.lengthTripod = 0.2;
+options.default.lengthTripod = 0.7;% Parameter to change-----------------
 options.imposeInitialState.ON = 0;
 % It is possible to pass an initial correcting state, e.g.:
 % options.imposeInitialState.ON = 1;
