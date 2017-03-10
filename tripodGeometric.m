@@ -88,14 +88,14 @@ function [geomPlan] = tripodCycle (polygonSeries, heights)
         temp(2).stFeet = temp(1).stFeet;
         for j=1:size(polygonSeries(i).stFeet,1)
             k = polygonSeries(i).stFeet(j);
-            eval(['temp(2).c', num2str(k), '= temp(1).c',num2str(k) ]);
-            eval(['temp(2).cdot', num2str(k), '= temp(1).cdot',num2str(k) ]);
+            eval(['temp(2).c', num2str(k), '= temp(1).c',num2str(k),';' ]);
+            eval(['temp(2).c', num2str(k), 'dot= temp(1).c',num2str(k),'dot;' ]);
         end       
         temp(2).swFeet = polygonSeries(i).swFeet;
         for j=1:size(polygonSeries(i).swFeet,1)
             k = polygonSeries(i).swFeet(j);
             eval(['temp(2).c', num2str(k), '= polygonSeries(i+1).stCoords(:,find(polygonSeries(i+1).stFeet == ', num2str(k), '))+addition;' ]);
-            eval(['temp(2).cdot', num2str(k), '= temp(1).cdot',num2str(k) ]);
+            eval(['temp(2).c', num2str(k), 'dot= temp(1).c',num2str(k),'dot;' ]);
         end       
         temp(2).angles = [polygonSeries(i).att, 0, 0];
         temp(2).height = (heights(1)+heights(2))/2;
@@ -109,13 +109,13 @@ function [geomPlan] = tripodCycle (polygonSeries, heights)
         temp(3).stFeet = [polygonSeries(i).stFeet;polygonSeries(i+1).stFeet];
         for j = 1:size(polygonSeries(i).stFeet,1)
             k = polygonSeries(i).stFeet(j);
-            eval(['temp(3).c', num2str(k), '= temp(2).c',num2str(k) ]);
-            eval(['temp(3).cdot', num2str(k), '= temp(2).cdot',num2str(k) ]);
+            eval(['temp(3).c', num2str(k), '= temp(2).c',num2str(k),';' ]);
+            eval(['temp(3).c', num2str(k), 'dot= temp(2).c',num2str(k),'dot;' ]);
         end     
         for j=1:size(polygonSeries(i+1).stFeet,1)
             k = polygonSeries(i+1).stFeet(j);
             eval(['temp(3).c', num2str(k), '= polygonSeries(i+1).stCoords(:,find(polygonSeries(i+1).stFeet == ', num2str(k), '));' ]);
-            eval(['temp(3).cdot', num2str(k), '= [0 0 0]']);
+            eval(['temp(3).c', num2str(k), 'dot= [0 0 0];']);
         end
         temp(3).swFeet = [];
         temp(3).angles = temp(2).angles;
@@ -130,19 +130,20 @@ function [geomPlan] = tripodCycle (polygonSeries, heights)
         temp(4).stFeet = polygonSeries(i+1).stFeet;
         for j = 1:size(polygonSeries(i+1).stFeet,1)
             k = polygonSeries(i+1).stFeet(j);
-            eval(['temp(4).c', num2str(k), '= temp(3).c',num2str(k) ]);
-            eval(['temp(4).cdot', num2str(k), '= temp(3).cdot',num2str(k) ]);
+            eval(['temp(4).c', num2str(k), '= temp(3).c',num2str(k),';' ]);
+            eval(['temp(4).c', num2str(k), 'dot= temp(3).c',num2str(k),'dot;' ]);
         end   
         temp(4).swFeet = polygonSeries(i+1).swFeet;
         for j=1:size(polygonSeries(i+1).swFeet,1)
             k = polygonSeries(i+1).swFeet(j);
-            eval(['temp(4).c', num2str(k), '= polygonSeries(i+1).swCoords(:,find(polygonSeries(i+1).stFeet == ', num2str(k), '))+addition;' ]);
-            eval(['temp(4).cdot', num2str(k), '= nan(1,3)']);
+            eval(['temp(4).c', num2str(k), '= polygonSeries(i+1).swCoords(:,find(polygonSeries(i+1).swFeet == ', num2str(k), '))+addition;' ]);
+            eval(['temp(4).c', num2str(k), 'dot= nan(1,3);']);
         end        
         temp(4).angles = temp(3).angles;
         temp(4).height = temp(3).height;
         
         %5. Second polygon reached
+        temp(5).number = i;
         temp(5).phase = 'p2';
         temp(5).COM = polygonSeries(i+1).COM;
         temp(5).COMdot = polygonSeries(i+1).COMdot;
@@ -150,13 +151,13 @@ function [geomPlan] = tripodCycle (polygonSeries, heights)
         temp(5).stFeet = temp(4).stFeet;
         for j=1:size(polygonSeries(i+1).stFeet,1)
             k = polygonSeries(i+1).stFeet(j);
-            eval(['temp(5).c', num2str(k), '= temp(4).c',num2str(k) ]);
-            eval(['temp(5).cdot', num2str(k), '= temp(4).cdot',num2str(k) ]);
+            eval(['temp(5).c', num2str(k), '= temp(4).c',num2str(k),';' ]);
+            eval(['temp(5).c', num2str(k), 'dot= temp(4).c',num2str(k),'dot;' ]);
         end     
         for j=1:size(polygonSeries(i+1).swFeet,1)
             k = polygonSeries(i+1).swFeet(j);
-            eval(['temp(5).c', num2str(k), '= temp(4).c',num2str(k)]);
-            eval(['temp(5).cdot', num2str(k), '= temp(4).cdot',num2str(k)]);
+            eval(['temp(5).c', num2str(k), '= temp(4).c',num2str(k),';']);
+            eval(['temp(5).c', num2str(k), 'dot= temp(4).c',num2str(k),'dot;']);
         end
         temp(5).swFeet = temp(4).swFeet;
         temp(5).angles = [polygonSeries(i+1).att, 0, 0];
