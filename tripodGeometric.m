@@ -1,4 +1,4 @@
-function [geomPlan] = tripodCycle (polygonSeries, heights)
+function [geomPlan] = tripodGeometric (polygonSeries, heights)
     % Gait planning for two consecutive support patterns given as a
     % PolygonSeries
     % -> If mod (numberPatterns,2) ~= 0 then the function plans the last 
@@ -46,7 +46,7 @@ function [geomPlan] = tripodCycle (polygonSeries, heights)
     end
    
     
-    for i=1:size(polygonSeries,2)
+    for i=1:size(polygonSeries,2)-1
         % Get intersection of two consecutive polygons in the series
         poly1 = stPolygons(i);
         poly2 = stPolygons(i+1);
