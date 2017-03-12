@@ -77,7 +77,7 @@ function [geomPlan] = tripodGeometric (polygonSeries, heights)
             eval(['temp(1).c', num2str(k), '= polygonSeries(i).swCoords(:,find(polygonSeries(i).swFeet == ', num2str(k), ')) + addition;' ]);
             eval(['temp(1).c', num2str(k) ,'dot = nan(1,3);']);
         end
-        temp(1).angles = [polygonSeries(i).att, 0, 0];
+        temp(1).angles = [0, 0, polygonSeries(i).att];
         temp(1).height = heights(i);
        
         % 2. Polygon intersection from first polygon
@@ -99,7 +99,7 @@ function [geomPlan] = tripodGeometric (polygonSeries, heights)
             eval(['temp(2).c', num2str(k), '= polygonSeries(i+1).stCoords(:,find(polygonSeries(i+1).stFeet == ', num2str(k), '))+addition;' ]);
             eval(['temp(2).c', num2str(k), 'dot= temp(1).c',num2str(k),'dot;' ]);
         end       
-        temp(2).angles = [polygonSeries(i).att, 0, 0];
+        temp(2).angles = [0, 0, polygonSeries(i).att];
         temp(2).height = (heights(1)+heights(2))/2;
         
         %3. Hexagon stance (3 old swing feet down)
@@ -165,7 +165,7 @@ function [geomPlan] = tripodGeometric (polygonSeries, heights)
             eval(['temp(5).c', num2str(k), 'dot= temp(4).c',num2str(k),'dot;']);
         end
         temp(5).swFeet = temp(4).swFeet;
-        temp(5).angles = [polygonSeries(i+1).att, 0, 0];
+        temp(5).angles = [0, 0, polygonSeries(i+1).att];
         temp(5).height = heights(i+1);       
         geomPlan = [geomPlan, temp];
     end

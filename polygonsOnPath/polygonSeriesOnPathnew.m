@@ -1,4 +1,4 @@
-function polygonSeries = polygonSeriesOnPath (slicedPath,options)
+function polygonSeries = polygonSeriesOnPathnew (slicedPath,options)
     % This function overlaps polygons along the via points on a slicedPath,
     % the options modify the behavior of the function.
     

@@ -1,6 +1,7 @@
 %% Example 1:
 clear;clc;
 stride = 0.25; % In meters-----------------------------------------------
+desiredHeigh = 0.65; % In meters------------------------------------------
 timeRes = 0.0001;   % In seconds
 completePath.xParams = [0.5 0.1]';
 completePath.yParams = [0.1 -0.1 -0.1]';
@@ -12,7 +13,7 @@ showSliced(completePath,slicedPath)
 % Fill in slicedPath wth tripods
 options.default.ON = 1;
 options.default.gait = 'tripod';
-options.default.lengthTripod = 0.7;% Parameter to change-----------------
+options.default.lengthTripod = 1;% Parameter to change-----------------
 options.imposeInitialState.ON = 0;
 % It is possible to pass an initial correcting state, e.g.:
 % options.imposeInitialState.ON = 1;
@@ -32,5 +33,8 @@ polygonSeries = reorderPolygonSeries(polygonSeries);
 showPolygonSeries(polygonSeries)
 
 % Get complete geometric gait plan
-geomPlan = tripodGeometric(polygonSeries,0.5);
+geomPlan = tripodGeometric(polygonSeries,desiredHeigh);
 geomPlanSimp = simplifyGeomPlan(geomPlan);
+
+% Compute feasibility of geometric plan
+feasGeomMap = feasibilityGeometric( geomPlanSimp );
