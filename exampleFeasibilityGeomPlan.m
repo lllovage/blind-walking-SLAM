@@ -25,7 +25,7 @@ options.imposeInitialState.ON = 0;
 % options.imposeInitialState.att = 0;
 % options.imposeInitialState.stCoords = [[0;-1;0;1],[1;0;0;1],[0;1;0;1]];
 % options.imposeInitialState.swCoords = [[0.5;-1;0;1],[1;0.5;0;1],[0.5;1;0;1]];
-polygonSeries = polygonSeriesOnPath (slicedPath,options);
+polygonSeries = polygonSeriesOnPathnew (slicedPath,options);
 % Put the vertices in counterclockwise order (this step ensures
 % compatibility with polygon functions created).
 polygonSeries = reorderPolygonSeries(polygonSeries);

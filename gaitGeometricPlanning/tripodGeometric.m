@@ -26,7 +26,7 @@ function [geomPlan] = tripodGeometric (polygonSeries, heights)
     poly1 = [];
     poly2 = [];
     [stPolygons, swPolygons] = polygonSeries2plainPolygons (polygonSeries);
-    epsilon = 0.15; % TO TUNE: In meters----------------------------------
+    epsilon = 0.05; % TO TUNE: In meters----------------------------------
     
     % Important TUNE this epsilon parameter (clearance before arrival
     % of the foot to the final ground
@@ -55,6 +55,7 @@ function [geomPlan] = tripodGeometric (polygonSeries, heights)
         % Fill in intrmediate phases. Notice "Number" field allows to see
         % FROM which polygon each of the 5 phases corresponds.
         % 1. First polygon
+        temp(1).t = polygonSeries(i).t;
         temp(1).number = i;
         temp(1).phase = 'p1';
         temp(1).COM = polygonSeries(i).COM;
@@ -80,6 +81,7 @@ function [geomPlan] = tripodGeometric (polygonSeries, heights)
         temp(1).height = heights(i);
        
         % 2. Polygon intersection from first polygon
+        temp(2).t = polygonSeries(i).t + (polygonSeries(i+1).t-polygonSeries(i).t)*(1/4);
         temp(2).number = i;
         temp(2).phase = 'pInt';
         temp(2).COM = intPoly.centroid(1:2)';
@@ -101,6 +103,7 @@ function [geomPlan] = tripodGeometric (polygonSeries, heights)
         temp(2).height = (heights(1)+heights(2))/2;
         
         %3. Hexagon stance (3 old swing feet down)
+        temp(3).t = polygonSeries(i).t + (polygonSeries(i+1).t-polygonSeries(i).t)*(2/4);
         temp(3).number = i;
         temp(3).phase = 'hex';
         temp(3).COM = temp(2).COM;
@@ -122,6 +125,7 @@ function [geomPlan] = tripodGeometric (polygonSeries, heights)
         temp(3).height = temp(2).height;
         
         %4. Intersection polygon to second polygon (3 new swing feet up)
+        temp(4).t = polygonSeries(i).t + (polygonSeries(i+1).t-polygonSeries(i).t)*(3/4);
         temp(4).number = i;
         temp(4).phase = 'pInt3up';
         temp(4).COM = temp(3).COM;
@@ -143,6 +147,7 @@ function [geomPlan] = tripodGeometric (polygonSeries, heights)
         temp(4).height = temp(3).height;
         
         %5. Second polygon reached
+        temp(5).t = polygonSeries(i).t + (polygonSeries(i+1).t-polygonSeries(i).t)*(4/4);
         temp(5).number = i;
         temp(5).phase = 'p2';
         temp(5).COM = polygonSeries(i+1).COM;
