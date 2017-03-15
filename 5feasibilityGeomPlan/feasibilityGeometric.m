@@ -9,6 +9,11 @@ function feasGeomMap = feasibilityGeometric( geomPlanSimp )
     % Either completely feasible or not the respective required lengths of
     % each of the leg branches as well as the respective triplets of cardan
     % angles per leg.
+    
+    % The feasibility measure is included at one field in the first row of
+    % the structure. This will only say how "much" feasible the whole plan
+    % is but the idea is to compute a totally feasible plan with feasValue
+    % = 0.
     TBrpy_Breal = compTBrpy_Breal;
     for i=1:size(geomPlanSimp,2)
         % Extract phase from geometric plan (Notice we need lengths in mm!)
@@ -29,6 +34,7 @@ function feasGeomMap = feasibilityGeometric( geomPlanSimp )
             % Compute IGM to find feasibility
             out  = IGM( FBreal , j );
             feasGeomMap(6*(i-1)+j).leg = j;
+            feasGeomMap(6*(i-1)+j).BiFootPos = FBreal;
             feasGeomMap(6*(i-1)+j).alpha = out.alpha;
             feasGeomMap(6*(i-1)+j).beta = out.beta;
             feasGeomMap(6*(i-1)+j).l = out.l;
@@ -45,5 +51,5 @@ function feasGeomMap = feasibilityGeometric( geomPlanSimp )
             feasGeomMap(6*(i-1)+j).Fb3 = out.feasFlags.Fb3;
         end        
     end
-  
+    feasGeomMap(1).feasValue = confirmGeomFeasibility( feasGeomMap );
 end

@@ -179,15 +179,18 @@ Sfz = Sf_A(3);
             feasFlags.Fb2 = cond4(2);
             feasFlags.Fb3 = cond4(3);
             out.l= l; out.alpha = alpha; out.beta = beta; out.feasFlags = feasFlags;
+            out.Sf = Sf; out.Sf_L = Sf_L;
         else
             feasFlags.Fnb1 = 1;
             l = [l1;nan(2,1)]; alpha = nan(1); beta = nan(1);
             out.l= l; out.alpha = alpha; out.beta = beta; out.feasFlags = feasFlags;
+            out.Sf = Sf; out.Sf_L = Sf_L;
         end
     else
         feasFlags.Fnl1 = 1;
         l = nan(3,1); alpha = nan(3,1); beta = nan(3,1);
         out.l= l; out.alpha = alpha; out.beta = beta; out.feasFlags = feasFlags;
+        out.Sf = Sf; out.Sf_L = Sf_L;
     end
 end
 
