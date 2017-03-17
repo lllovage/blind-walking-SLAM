@@ -6,7 +6,7 @@ function out = IKMleg ( Sfdot,leg_label, IGM )
         % IGM: Structure output of the IGM at same time instant in which
         % IKM should be computed.
         
-    R_U = sqrt(27^2+43^2)*sin(pi-asin(199/282)-atan2(43,27))+159; %六条腿U1所在的圆半径
+    R_U = sqrt(27^2+43^2)*sin(pi-asin(199/282)-atan2(43,27))+159;
     Sf = IGM.Sf;
     Sfdot = [Sfdot(1); Sfdot(2); Sfdot(3)];
     switch leg_label
@@ -39,7 +39,7 @@ function out = IKMleg ( Sfdot,leg_label, IGM )
             R_L_B = [cos(pi)*sqrt(282^2-199^2)/282,-199/282,-sin(pi)*sqrt(282^2-199^2)/282;cos(pi)*199/282,sqrt(282^2-199^2)/282,-sin(pi)*199/282;sin(pi),0,cos(pi)];
             Sf_L = R_L_B*(Sf - P_B_LORG);
             Sf_Ldot = R_L_B*Sfdot;
-        otherwise %求腿6的Sf在腿坐标系(L)下的坐标
+        otherwise
             P_B_LORG = [-R_U*sin(pi/6);0;R_U*cos(pi/6)];
             R_L_B = [cos(4/3*pi)*sqrt(282^2-199^2)/282,-199/282,-sin(4/3*pi)*sqrt(282^2-199^2)/282;cos(4/3*pi)*199/282,sqrt(282^2-199^2)/282,-sin(4/3*pi)*199/282;sin(4/3*pi),0,cos(4/3*pi)];
             Sf_L = R_L_B*(Sf - P_B_LORG);

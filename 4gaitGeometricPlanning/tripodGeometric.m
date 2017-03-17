@@ -22,6 +22,10 @@ function [geomPlan] = tripodGeometric (polygonSeries, heights)
     
     % Roll and pitch angles are nullified at every phase of the plan in
     % order to command a more stable gait.
+    % The output structure geomPlan includes already some velocities for
+    % the COM and the stance feet (v=0). This velocities are in ABSOLUTE frame and will
+    % be used by the Kinematic planner to calculate the final velocities of
+    % the feet with respect to the body. 
     geomPlan = [];
     poly1 = [];
     poly2 = [];

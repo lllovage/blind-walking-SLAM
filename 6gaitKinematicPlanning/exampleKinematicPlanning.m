@@ -2,6 +2,7 @@
 clear;clc;
 stride = 0.25; % In meters-----------------------------------------------
 desiredHeigh = 0.65; % In meters------------------------------------------
+Ts = 0.01; %In seconds----------------------------------------------------
 timeRes = 0.0001;   % In seconds
 completePath.xParams = [0.5 0.1]';
 completePath.yParams = [0.1 -0.1 -0.1]';
@@ -40,4 +41,24 @@ showPolygonIntersections (geomPlanSimp);
 % Compute feasibility of geometric plan
 feasGeomMap = feasibilityGeometric( geomPlanSimp );
 
-%If geometric plan totally feasible then generate the kinematic plan
+%Can use the next commented lines to call planned directly but the
+%phasicKinematicPlan function des this directly if a
+%feasGeomMap is available.
+% constraints(1).time = 0;
+% constraints(1).type = 'p';
+% constraints(1).value = 0;
+% constraints(1).Ts = 0.01;
+% %........................
+% constraints(2).time = 1;
+% constraints(2).type = 'p';
+% constraints(2).value = 0.1;
+% %........................
+% constraints(3).time = 0;
+% constraints(3).type = 'v';
+% constraints(3).value = 0;
+% %........................
+% constraints(4).time = 1;
+% constraints(4).type = 'v';
+% constraints(4).value = 0;
+% out = genTraj (constraints);
+kinemPlan = phasicKinematicPlan (feasGeomMap,Ts);

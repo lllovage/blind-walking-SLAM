@@ -24,16 +24,34 @@ function slicedPath = slicePath (completePath,stride,timeRes)
     slicedPath.deltaPos = [];
     deltaPos = 0;
     
-    x = solvePoly(completePath.xParams,completePath.t0,1);
-    y = solvePoly(completePath.yParams,completePath.t0,1);
+    [x,tempParams] = solvePoly(completePath.xParams,completePath.t0,1);
+    [y,tempParams] = solvePoly(completePath.yParams,completePath.t0,1);
     t = completePath.t0;
+    
+    % First posture in sliced path will be initial posture for sure
+    [xnew, tempParams] = solvePoly(completePath.xParams,t,1);
+    [ynew, tempParams] = solvePoly(completePath.yParams,t,1);
+    viaPos = [viaPos; [t, xnew, ynew]];
+    % Get velocity constraints
+    [xnewd, tempParams] = solvePoly(completePath.xParams,t,2);
+    [ynewd, tempParams] = solvePoly(completePath.yParams,t,2);
+    viaVel = [viaVel; [t, xnewd, ynewd]];
+    % Get acceleration constraints
+    [xnewdd, tempParams] = solvePoly(completePath.xParams,t,3);
+    [ynewdd, tempParams] = solvePoly(completePath.yParams,t,3);
+    viaAcc = [viaAcc; [t, xnewdd, ynewdd]];
+    % Notice: Atittude given back in radians
+    newAttitude = compAttitude( completePath, t );
+    viaAtt = [viaAtt; [t,newAttitude]];
+    
+    
     while 1
         t = t + timeRes;
         if t > completePath.tf
             break
         end
-        xnew = solvePoly(completePath.xParams,t,1);
-        ynew = solvePoly(completePath.yParams,t,1);
+        [xnew, tempParams] = solvePoly(completePath.xParams,t,1);
+        [ynew, tempParams] = solvePoly(completePath.yParams,t,1);
         deltaPos = sqrt((xnew-x)^2+(ynew-y)^2);
         if deltaPos >= stride
             % Notice that for function solvePoly, it suffices to pass only
@@ -41,12 +59,12 @@ function slicedPath = slicePath (completePath,stride,timeRes)
             % is performed inside of the function.
             viaPos = [viaPos; [t, xnew, ynew]];
             % Get velocity constraints
-            xnewd = solvePoly(completePath.xParams,t,2);
-            ynewd = solvePoly(completePath.yParams,t,2);
+            [xnewd, tempParams] = solvePoly(completePath.xParams,t,2);
+            [ynewd, tempParams] = solvePoly(completePath.yParams,t,2);
             viaVel = [viaVel; [t, xnewd, ynewd]];
             % Get acceleration constraints
-            xnewdd = solvePoly(completePath.xParams,t,3);
-            ynewdd = solvePoly(completePath.yParams,t,3);
+            [xnewdd, tempParams] = solvePoly(completePath.xParams,t,3);
+            [ynewdd, tempParams] = solvePoly(completePath.yParams,t,3);
             viaAcc = [viaAcc; [t, xnewdd, ynewdd]];
             % Notice: Atittude given back in radians
             newAttitude = compAttitude( completePath, t );
