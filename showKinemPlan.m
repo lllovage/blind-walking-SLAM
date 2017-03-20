@@ -29,16 +29,25 @@ function showKinemPlan(geomPlanSimp,kinemPlan0)
             plot3(F0(1,:), F0(2,:), F0(3,:), col(j));
             hold on;
         end
+        % Plot COM
+         COM = 1000*[kinemPlan0((i-1)*6+1).COM.sim.xpos;...
+                kinemPlan0((i-1)*6+1).COM.sim.ypos;...
+                kinemPlan0((i-1)*6+1).COM.sim.zpos];
+         plot3(COM(1,:), COM(2,:), COM(3,:), 'cx');
+         hold on;
+        
+        % Plot stance feet information
             stFeet1 = phase1.stFeet;
             stFeet2 = phase2.stFeet;
             for k = 1:size(stFeet1,1)
-                eval(['plot3(phase1.c', num2str(stFeet1(k)),'(1)*1000,', 'phase1.c', num2str(stFeet1(k)),'(2)*1000,', 'phase1.c', num2str(stFeet1(k)),'(3)*1000,','''go''',')']);
+                eval(['plot3(phase1.c', num2str(stFeet1(k)),'(1)*1000,', 'phase1.c', num2str(stFeet1(k)),'(2)*1000,', 'phase1.c', num2str(stFeet1(k)),'(3)*1000,','''gs''',')']);
                 hold on;
                 txt1 = ['\leftarrow ', num2str(stFeet1(k)),'t', num2str(i)];
                 eval(['x1 = phase1.c', num2str(stFeet1(k)),'(1)*1000;']);
                 eval(['y1 = phase1.c', num2str(stFeet1(k)),'(2)*1000;']);
                 eval(['z1 = phase1.c', num2str(stFeet1(k)),'(3)*1000;']);
                 text(x1,y1,z1,txt1); 
+                hold on;
             end
 %             for k = 1:size(stFeet2,1)
 %                 eval(['plot3(phase2.c', num2str(stFeet2(k)),'(1)*1000,', 'phase2.c', num2str(stFeet2(k)),'(2)*1000,', 'phase2.c', num2str(stFeet2(k)),'(3)*1000,','''mo''',')']);

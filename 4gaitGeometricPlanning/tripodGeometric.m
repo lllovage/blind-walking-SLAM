@@ -144,7 +144,8 @@ function [geomPlan] = tripodGeometric (polygonSeries, heights)
         temp(4).swFeet = polygonSeries(i+1).swFeet;
         for j=1:size(polygonSeries(i+1).swFeet,1)
             k = polygonSeries(i+1).swFeet(j);
-            eval(['temp(4).c', num2str(k), '= polygonSeries(i+1).swCoords(:,find(polygonSeries(i+1).swFeet == ', num2str(k), '))+addition;' ]);
+            %eval(['temp(4).c', num2str(k), '= polygonSeries(i+1).swCoords(:,find(polygonSeries(i+1).swFeet == ', num2str(k), '))+addition;' ]);
+            eval(['temp(4).c', num2str(k), '= temp(3).c',num2str(k),'+addition;' ]);
             eval(['temp(4).c', num2str(k), 'dot= nan(1,3);']);
         end        
         temp(4).angles = temp(3).angles;
@@ -165,7 +166,8 @@ function [geomPlan] = tripodGeometric (polygonSeries, heights)
         end     
         for j=1:size(polygonSeries(i+1).swFeet,1)
             k = polygonSeries(i+1).swFeet(j);
-            eval(['temp(5).c', num2str(k), '= temp(4).c',num2str(k),';']);
+            %eval(['temp(5).c', num2str(k), '= temp(4).c',num2str(k),';']);
+            eval(['temp(5).c', num2str(k), '= polygonSeries(i+1).swCoords(:,find(polygonSeries(i+1).swFeet == ', num2str(k), '))+addition;' ]);
             eval(['temp(5).c', num2str(k), 'dot= temp(4).c',num2str(k),'dot;']);
         end
         temp(5).swFeet = temp(4).swFeet;

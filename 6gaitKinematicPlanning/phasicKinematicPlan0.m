@@ -158,28 +158,28 @@ function kinemPlan = phasicKinematicPlan0 (feasGeomMap,Ts)
             COMtraj = genTraj (constraints);
             out((i-1)*6+1).COM.COM00(ck) = p0;
             out((i-1)*6+1).COM.COM0f(ck) = pf;
-            out((i-1)*6+1).COM.sim.t = traj.sim.t;
+            out((i-1)*6+1).COM.sim.t = COMtraj.sim.t;
             if ck == 1
-                out((i-1)*6+1).COM.params.xpos = traj.posParams;
-                out((i-1)*6+1).COM.params.xvel = traj.velParams;
-                out((i-1)*6+1).COM.params.xacc = traj.accParams;
-                out((i-1)*6+1).COM.sim.xpos = traj.sim.pos;
-                out((i-1)*6+1).COM.sim.xvel = traj.sim.vel;
-                out((i-1)*6+1).COM.sim.xacc = traj.sim.acc;
+                out((i-1)*6+1).COM.params.xpos = COMtraj.posParams;
+                out((i-1)*6+1).COM.params.xvel = COMtraj.velParams;
+                out((i-1)*6+1).COM.params.xacc = COMtraj.accParams;
+                out((i-1)*6+1).COM.sim.xpos = COMtraj.sim.pos;
+                out((i-1)*6+1).COM.sim.xvel = COMtraj.sim.vel;
+                out((i-1)*6+1).COM.sim.xacc = COMtraj.sim.acc;
             elseif ck == 2
-                out((i-1)*6+1).COM.params.ypos = traj.posParams;
-                out((i-1)*6+1).COM.params.yvel = traj.velParams;
-                out((i-1)*6+1).COM.params.yacc = traj.accParams;
-                out((i-1)*6+1).COM.sim.ypos = traj.sim.pos;
-                out((i-1)*6+1).COM.sim.yvel = traj.sim.vel;
-                out((i-1)*6+1).COM.sim.yacc = traj.sim.acc;
+                out((i-1)*6+1).COM.params.ypos = COMtraj.posParams;
+                out((i-1)*6+1).COM.params.yvel = COMtraj.velParams;
+                out((i-1)*6+1).COM.params.yacc = COMtraj.accParams;
+                out((i-1)*6+1).COM.sim.ypos = COMtraj.sim.pos;
+                out((i-1)*6+1).COM.sim.yvel = COMtraj.sim.vel;
+                out((i-1)*6+1).COM.sim.yacc = COMtraj.sim.acc;
             elseif ck == 3
-                out((i-1)*6+1).COM.params.zpos = traj.posParams;
-                out((i-1)*6+1).COM.params.zvel = traj.velParams;
-                out((i-1)*6+1).COM.params.zacc = traj.accParams;
-                out((i-1)*6+1).COM.sim.zpos = traj.sim.pos;
-                out((i-1)*6+1).COM.sim.zvel = traj.sim.vel;
-                out((i-1)*6+1).COM.sim.zacc = traj.sim.acc;
+                out((i-1)*6+1).COM.params.zpos = COMtraj.posParams;
+                out((i-1)*6+1).COM.params.zvel = COMtraj.velParams;
+                out((i-1)*6+1).COM.params.zacc = COMtraj.accParams;
+                out((i-1)*6+1).COM.sim.zpos = COMtraj.sim.pos;
+                out((i-1)*6+1).COM.sim.zvel = COMtraj.sim.vel;
+                out((i-1)*6+1).COM.sim.zacc = COMtraj.sim.acc;
             else
             end
         end % end COM trajectory computation      
