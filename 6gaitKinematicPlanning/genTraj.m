@@ -90,7 +90,7 @@ function out = genTraj (constraints)
     mult = mult.*[mult(2:end),0];
     accParams = mult.*posParams';
     accParams = [0,0, accParams(1:end-2)]';
-    % Not from top to down: 1, x, x^2, x^3, ... x^n 
+    % Need next formalism for parameters: 1, x, x^2, x^3, ... x^n 
     accParams = flipud(accParams);
     posParams = flipud(posParams);
     velParams = flipud(velParams);

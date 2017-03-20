@@ -31,10 +31,16 @@ function feasGeomMap = feasibilityGeometric( geomPlanSimp )
             feasGeomMap(6*(i-1)+j).t = geomPlanSimp(i).t;
             feasGeomMap(6*(i-1)+j).number = geomPlanSimp(i).number;
             feasGeomMap(6*(i-1)+j).phase = geomPlanSimp(i).phase;
+            if sum(phase.stFeet == j) > 0
+                feasGeomMap(6*(i-1)+j).st1_sw0 = 1;
+            else
+                feasGeomMap(6*(i-1)+j).st1_sw0 = 0;
+            end
             % Compute IGM to find feasibility
             out  = IGM( FBreal , j );
             feasGeomMap(6*(i-1)+j).leg = j;
             feasGeomMap(6*(i-1)+j).BiFootPos = FBreal;
+            feasGeomMap(6*(i-1)+j).FootPos0 = F0;
             feasGeomMap(6*(i-1)+j).alpha = out.alpha;
             feasGeomMap(6*(i-1)+j).beta = out.beta;
             feasGeomMap(6*(i-1)+j).l = out.l;
@@ -49,7 +55,9 @@ function feasGeomMap = feasibilityGeometric( geomPlanSimp )
             feasGeomMap(6*(i-1)+j).Fb1 = out.feasFlags.Fb1;
             feasGeomMap(6*(i-1)+j).Fb2 = out.feasFlags.Fb2;
             feasGeomMap(6*(i-1)+j).Fb3 = out.feasFlags.Fb3;
-        end        
+        end 
+        feasGeomMap(6*(i-1)+1).COM0 = [geomPlanSimp(i).COM,geomPlanSimp(i).height];
     end
     feasGeomMap(1).feasValue = confirmGeomFeasibility( feasGeomMap );
+    feasGeomMap(1).gait = geomPlanSimp(1).gait;
 end

@@ -61,4 +61,11 @@ feasGeomMap = feasibilityGeometric( geomPlanSimp );
 % constraints(4).type = 'v';
 % constraints(4).value = 0;
 % out = genTraj (constraints);
-kinemPlan = phasicKinematicPlan (feasGeomMap,Ts);
+
+% Option 1: Plan trajectory in FBreal
+kinemPlanBreal = phasicKinematicPlanBreal (feasGeomMap,Ts);
+% Option 2: Plan trajectory in F0
+kinemPlan0 = phasicKinematicPlan0 (feasGeomMap,Ts);
+% Visualize trajectory planning (ONLY AVAILABLE FOR KINEMATIC PLAN IN
+% ABSOLUTE FRAME)
+showKinemPlan(geomPlanSimp,kinemPlan0);

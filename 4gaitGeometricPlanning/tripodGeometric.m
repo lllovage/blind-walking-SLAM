@@ -173,4 +173,5 @@ function [geomPlan] = tripodGeometric (polygonSeries, heights)
         temp(5).height = heights(i+1);       
         geomPlan = [geomPlan, temp];
     end
+    geomPlan(1).gait = 'tripod';
 end

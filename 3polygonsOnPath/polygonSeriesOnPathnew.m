@@ -83,6 +83,7 @@ function polygonSeries = polygonSeriesOnPathnew (slicedPath,options)
                 %---- no action
             end
             polygonSeries = tripodPath;
+            polygonSeries(1).gait = 'tripod';
         elseif strcmp(options.default.gait, 'FTL')
             %-----
         end
