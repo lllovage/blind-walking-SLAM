@@ -57,6 +57,7 @@ function feasGeomMap = feasibilityGeometric( geomPlanSimp )
             feasGeomMap(6*(i-1)+j).Fb3 = out.feasFlags.Fb3;
         end 
         feasGeomMap(6*(i-1)+1).COM0 = [geomPlanSimp(i).COM,geomPlanSimp(i).height];
+        feasGeomMap(6*(i-1)+1).angles = geomPlanSimp(i).angles;
     end
     feasGeomMap(1).feasValue = confirmGeomFeasibility( feasGeomMap );
     feasGeomMap(1).gait = geomPlanSimp(1).gait;

@@ -131,34 +131,43 @@ function kinemPlan = phasicKinematicPlan0 (feasGeomMap,Ts)
             out((i-1)*6+j).vf = vf;
         end %---end legs
         
-        % Afterwards, compute COM trajectory
-        for ck = 1:3 %x, y, z in COM
+        % Afterwards, compute COM trajectory and angles trajectory
+        for ck = 1:3 %x, y, z in COM and a,b,g in angles
             t0 = feasGeomMap((i-1)*6+1).t;
             tf = feasGeomMap((i)*6+1).t;
             p0 = feasGeomMap((i-1)*6+1).COM0(ck);
+            ang0 = feasGeomMap((i-1)*6+1).angles(ck);
             pf = feasGeomMap((i)*6+1).COM0(ck);
+            angf = feasGeomMap((i)*6+1).angles(ck);
             v0 = 0;
+            w0 = 0;
             vf = 0;
-            constraints(1).time = t0;
-            constraints(1).type = 'p';
-            constraints(1).value = p0;
-            constraints(1).Ts = Ts;
-            %........................
-            constraints(2).time = t0;
-            constraints(2).type = 'v';
-            constraints(2).value = v0;
-            %........................
-            constraints(3).time = tf;
-            constraints(3).type = 'p';
-            constraints(3).value = pf;
-            %........................
-            constraints(4).time = tf;
-            constraints(4).type = 'v';
-            constraints(4).value = vf;
+            wf = 0;
+            constraints(1).time = t0;   constraints2(1).time = t0;
+            constraints(1).type = 'p';  constraints2(1).type = 'p';
+            constraints(1).value = p0;  constraints2(1).value = ang0;
+            constraints(1).Ts = Ts;     constraints2(1).Ts = Ts;
+            %.......................................................
+            constraints(2).time = t0;   constraints2(2).time = t0;
+            constraints(2).type = 'v';  constraints2(2).type = 'v';
+            constraints(2).value = v0;  constraints2(2).value = w0;
+            %.......................................................
+            constraints(3).time = tf;   constraints2(3).time = tf;
+            constraints(3).type = 'p';  constraints2(3).type = 'p';
+            constraints(3).value = pf;  constraints2(3).value = angf;
+            %.......................................................
+            constraints(4).time = tf;   constraints2(4).time = tf;
+            constraints(4).type = 'v';  constraints2(4).type = 'v';
+            constraints(4).value = vf;  constraints2(4).value = wf;
             COMtraj = genTraj (constraints);
+            angtraj = genTraj (constraints2);
+            % Logging section
             out((i-1)*6+1).COM.COM00(ck) = p0;
             out((i-1)*6+1).COM.COM0f(ck) = pf;
             out((i-1)*6+1).COM.sim.t = COMtraj.sim.t;
+            out((i-1)*6+1).angles.ang0(ck) = ang0;
+            out((i-1)*6+1).angles.angf(ck) = angf;
+            out((i-1)*6+1).angles.sim.t = angtraj.sim.t;
             if ck == 1
                 out((i-1)*6+1).COM.params.xpos = COMtraj.posParams;
                 out((i-1)*6+1).COM.params.xvel = COMtraj.velParams;
@@ -166,6 +175,13 @@ function kinemPlan = phasicKinematicPlan0 (feasGeomMap,Ts)
                 out((i-1)*6+1).COM.sim.xpos = COMtraj.sim.pos;
                 out((i-1)*6+1).COM.sim.xvel = COMtraj.sim.vel;
                 out((i-1)*6+1).COM.sim.xacc = COMtraj.sim.acc;
+       
+                out((i-1)*6+1).angles.params.a = angtraj.posParams;
+                out((i-1)*6+1).angles.params.ad = angtraj.velParams;
+                out((i-1)*6+1).angles.params.add = angtraj.accParams;
+                out((i-1)*6+1).angles.sim.a = angtraj.sim.pos;
+                out((i-1)*6+1).angles.sim.ad = angtraj.sim.vel;
+                out((i-1)*6+1).angles.sim.add = angtraj.sim.acc;
             elseif ck == 2
                 out((i-1)*6+1).COM.params.ypos = COMtraj.posParams;
                 out((i-1)*6+1).COM.params.yvel = COMtraj.velParams;
@@ -173,6 +189,13 @@ function kinemPlan = phasicKinematicPlan0 (feasGeomMap,Ts)
                 out((i-1)*6+1).COM.sim.ypos = COMtraj.sim.pos;
                 out((i-1)*6+1).COM.sim.yvel = COMtraj.sim.vel;
                 out((i-1)*6+1).COM.sim.yacc = COMtraj.sim.acc;
+                
+                out((i-1)*6+1).angles.params.b = angtraj.posParams;
+                out((i-1)*6+1).angles.params.bd = angtraj.velParams;
+                out((i-1)*6+1).angles.params.bdd = angtraj.accParams;
+                out((i-1)*6+1).angles.sim.b = angtraj.sim.pos;
+                out((i-1)*6+1).angles.sim.bd = angtraj.sim.vel;
+                out((i-1)*6+1).angles.sim.bdd = angtraj.sim.acc;
             elseif ck == 3
                 out((i-1)*6+1).COM.params.zpos = COMtraj.posParams;
                 out((i-1)*6+1).COM.params.zvel = COMtraj.velParams;
@@ -180,9 +203,16 @@ function kinemPlan = phasicKinematicPlan0 (feasGeomMap,Ts)
                 out((i-1)*6+1).COM.sim.zpos = COMtraj.sim.pos;
                 out((i-1)*6+1).COM.sim.zvel = COMtraj.sim.vel;
                 out((i-1)*6+1).COM.sim.zacc = COMtraj.sim.acc;
+                
+                out((i-1)*6+1).angles.params.g = angtraj.posParams;
+                out((i-1)*6+1).angles.params.gd = angtraj.velParams;
+                out((i-1)*6+1).angles.params.gdd = angtraj.accParams;
+                out((i-1)*6+1).angles.sim.g = angtraj.sim.pos;
+                out((i-1)*6+1).angles.sim.gd = angtraj.sim.vel;
+                out((i-1)*6+1).angles.sim.gdd = angtraj.sim.acc;
             else
             end
-        end % end COM trajectory computation      
+        end % end COM and angles trajectory computation      
     end % ---end transitions
     out(1).Ts = Ts;
     kinemPlan = out;

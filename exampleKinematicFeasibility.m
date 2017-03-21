@@ -2,9 +2,15 @@
 clear;clc;
 stride = 0.25; % In meters-----------------------------------------------
 desiredHeigh = 0.65; % In meters------------------------------------------
+Ts = 0.01; %In seconds----------------------------------------------------
 timeRes = 0.0001;   % In seconds
+% Follow formalism [1 t t^2 t^3 ... t^n]
 completePath.xParams = [0.5 0.1]';
 completePath.yParams = [0.1 -0.1 -0.1]';
+completePath.zParams = [0.65];
+completePath.aParams = [0];
+completePath.bParams = [0];
+completePath.gParams = []; % Following the curve (to be given by input planner)
 completePath.t0 = 0; % In seconds
 completePath.tf = 5;
 slicedPath = slicePath (completePath,stride,timeRes);
@@ -39,6 +45,39 @@ options.default = 1;
 % which height will be overriden.
 geomPlan = tripodGeometric(polygonSeries,desiredHeigh,options);
 geomPlanSimp = simplifyGeomPlan(geomPlan);
+showPolygonIntersections (geomPlanSimp);
 
 % Compute feasibility of geometric plan
 feasGeomMap = feasibilityGeometric( geomPlanSimp );
+
+%Can use the next commented lines to call planned directly but the
+%phasicKinematicPlan function des this directly if a
+%feasGeomMap is available.
+% constraints(1).time = 0;
+% constraints(1).type = 'p';
+% constraints(1).value = 0;
+% constraints(1).Ts = 0.01;
+% %........................
+% constraints(2).time = 1;
+% constraints(2).type = 'p';
+% constraints(2).value = 0.1;
+% %........................
+% constraints(3).time = 0;
+% constraints(3).type = 'v';
+% constraints(3).value = 0;
+% %........................
+% constraints(4).time = 1;
+% constraints(4).type = 'v';
+% constraints(4).value = 0;
+% out = genTraj (constraints);
+
+% Option 1: Plan trajectory in FBreal
+kinemPlanBreal = phasicKinematicPlanBreal (feasGeomMap,Ts);
+% Option 2: Plan trajectory in F0
+kinemPlan = phasicKinematicPlan0 (feasGeomMap,Ts);
+% Visualize trajectory planning (ONLY AVAILABLE FOR KINEMATIC PLAN IN
+% ABSOLUTE FRAME)
+showKinemPlan(geomPlanSimp,kinemPlan0);
+%Determine geometrical feasibility for the whole trajectory
+feasKinemMap = feasibilityKinematic(kinemPlan0);
+showBranchSpeeds();

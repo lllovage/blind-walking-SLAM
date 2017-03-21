@@ -4,8 +4,13 @@ stride = 0.25; % In meters-----------------------------------------------
 desiredHeigh = 0.65; % In meters------------------------------------------
 Ts = 0.01; %In seconds----------------------------------------------------
 timeRes = 0.0001;   % In seconds
+% Follow formalism [1 t t^2 t^3 ... t^n]
 completePath.xParams = [0.5 0.1]';
 completePath.yParams = [0.1 -0.1 -0.1]';
+completePath.zParams = [0.65];
+completePath.aParams = [0];
+completePath.bParams = [0];
+completePath.gParams = []; % Following the curve (to be given by input planner)
 completePath.t0 = 0; % In seconds
 completePath.tf = 5;
 slicedPath = slicePath (completePath,stride,timeRes);
@@ -34,7 +39,11 @@ polygonSeries = reorderPolygonSeries(polygonSeries);
 showPolygonSeries(polygonSeries)
 
 % Get complete geometric gait plan
-geomPlan = tripodGeometric(polygonSeries,desiredHeigh);
+options.default = 1;
+% Otherwise need
+% options.xParams, options.yParams, options.zParams, options.angles in
+% which height will be overriden.
+geomPlan = tripodGeometric(polygonSeries,desiredHeigh,options);
 geomPlanSimp = simplifyGeomPlan(geomPlan);
 showPolygonIntersections (geomPlanSimp);
 

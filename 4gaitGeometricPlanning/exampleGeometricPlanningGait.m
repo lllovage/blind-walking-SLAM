@@ -32,5 +32,9 @@ polygonSeries = reorderPolygonSeries(polygonSeries);
 showPolygonSeries(polygonSeries)
 
 % Get complete geometric gait plan
-geomPlan = tripodGeometric(polygonSeries,0.5);
+options.default = 1;
+% Otherwise need
+% options.xParams, options.yParams, options.zParams, options.angles in
+% which height will be overriden.
+geomPlan = tripodGeometric(polygonSeries,0.65,options);
 geomPlanSimp = simplifyGeomPlan(geomPlan);
