@@ -81,5 +81,6 @@ function feasKinemMap = feasibilityKinematic(kinemPlan)
     end
     feasKinemMap(1).feasValue = confirmGeomFeasibility( feasKinemMap );
     feasKinemMap(1).gait = kinemPlan(1).gait;
+    feasKinemMap(1).Ts = kinemPlan(1).Ts;
   
 end

@@ -80,4 +80,6 @@ kinemPlan = phasicKinematicPlan0 (feasGeomMap,Ts);
 showKinemPlan(geomPlanSimp,kinemPlan0);
 %Determine geometrical feasibility for the whole trajectory
 feasKinemMap = feasibilityKinematic(kinemPlan0);
+boundKinemMap = kinemBound (feasKinemMap);
+boundKinemMap = confirmKinemFeasibility( boundKinemMap );
 showBranchSpeeds();
