@@ -13,8 +13,10 @@ function showPolygonSeries(polygonSeries)
                 y2 = polygonSeries(i).stCoords(2,k);
                 line([x1,x2],[y1,y2])
                 plot(x1,y1,'gx')
+                hold on;
                 txt1 = ['\leftarrow ',num2str(polygonSeries(i).stFeet(j))];
                 text(x1,y1,txt1)
+                hold on;
         end
         
         %Swing feet drawing
@@ -30,8 +32,10 @@ function showPolygonSeries(polygonSeries)
 %                 y2 = polygonSeries(i).swCoords(2,k);
 %                 line([x1,x2],[y1,y2])
                 plot(x1,y1,'ko')
+                hold on;
                 txt1 = ['\leftarrow ',num2str(polygonSeries(i).swFeet(j))];
                 text(x1,y1,txt1)
+                hold on;
         end
         
         % ---------

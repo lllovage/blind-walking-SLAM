@@ -6,8 +6,16 @@ function geomPlanSimp = simplifyGeomPlan( geomPlan )
     % acertains its forst phase (p1) and with this it is automatically
     % consider that the last step reached for sure its last phase (p2).
     geomPlanSimp = [];
-    for i = 1:size(geomPlan,2)/5
-        geomPlanSimp = [geomPlanSimp, geomPlan(5*(i-1)+1:5*(i-1)+4)];
+    if strcmp(geomPlan(1).gait, 'initializedTripod');
+        geomPlanSimp = [geomPlanSimp, geomPlan(1:2)];
+        start = 3;
+    else start = 1; 
+    end
+    for i = 1:size(geomPlan(start:end),2)/5
+        geomPlanSimp = [geomPlanSimp, geomPlan(5*(i-1)+1+(start-1):5*(i-1)+4+(start-1))];
+    end
+    if strcmp(geomPlan(1).gait, 'initializedTripod');
+        geomPlanSimp = [geomPlanSimp(1:2), geomPlanSimp(4:end)];
     end
 
 

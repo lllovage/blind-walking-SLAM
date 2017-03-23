@@ -62,4 +62,5 @@ function tripodPath = tripodFillnew (slicedPath, lengthTripod)
               tripodPath(i).swCoords = T*L;
         end
     end
+    tripodPath(1).gait = 'tripod';
 end

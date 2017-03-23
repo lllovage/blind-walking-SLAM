@@ -77,9 +77,9 @@ kinemPlanBreal = phasicKinematicPlanBreal (feasGeomMap,Ts);
 kinemPlan = phasicKinematicPlan0 (feasGeomMap,Ts);
 % Visualize trajectory planning (ONLY AVAILABLE FOR KINEMATIC PLAN IN
 % ABSOLUTE FRAME)
-showKinemPlan(geomPlanSimp,kinemPlan0);
+showKinemPlan(geomPlanSimp,kinemPlan);
 %Determine geometrical feasibility for the whole trajectory
-feasKinemMap = feasibilityKinematic(kinemPlan0);
+feasKinemMap = feasibilityKinematic(kinemPlan);
 boundKinemMap = kinemBound (feasKinemMap);
 boundKinemMap = confirmKinemFeasibility( boundKinemMap );
 showBranchSpeeds();

@@ -8,9 +8,16 @@ function [stPolygons, swPolygons] = polygonSeries2plainPolygons (polygonSeries)
         [temp.cent(1,1), temp.cent(2,1), temp.cent(3,1),temp.cent(4,1)] = centroidPolygon2D ( temp );
         stPolygons = [stPolygons;temp];
         
-        temp.feet = polygonSeries(i).swFeet;
-        temp.coords = polygonSeries(i).swCoords(1:2,:)';
-        temp.A = areaPolygon2D ( temp );
-        swPolygons = [swPolygons;temp];
+        if isempty(polygonSeries(i).swFeet)
+            temp.feet = [];
+            temp.coords = [];
+            temp.A = 0;
+            swPolygons = [swPolygons;temp];
+        else
+            temp.feet = polygonSeries(i).swFeet;
+            temp.coords = polygonSeries(i).swCoords(1:2,:)';
+            temp.A = areaPolygon2D ( temp );
+            swPolygons = [swPolygons;temp];
+        end
     end
 end

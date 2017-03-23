@@ -17,7 +17,7 @@ function kinemPlan = phasicKinematicPlan0 (feasGeomMap,Ts)
     % with the control plan.
     
     if feasGeomMap(1).feasValue ~= 0
-        warning('Kinematic Plan: Kinematic Plan of not toally feasible Geometric Plan computed. Not recommended to go further, revise position constraints first.');
+        warning('Kinematic Plan: Kinematic Plan of not totally feasible Geometric Plan computed. Not recommended to go further, revise position constraints first.');
     else
     end
     %Prepare constraints
@@ -28,6 +28,7 @@ function kinemPlan = phasicKinematicPlan0 (feasGeomMap,Ts)
             % Allow only computations in vertical direction if feet have to
             % land or take off. In plane direction impose null movement.
             if strcmp(feasGeomMap((i-1)*6+1).phase,'pInt') && feasGeomMap((i-1)*6+j).st1_sw0 == 0 && k ~= 3   
+                % Three legs are going down
                 t0 = feasGeomMap((i-1)*6+1).t;
                 tf = feasGeomMap((i)*6+1).t;
                 p0 = feasGeomMap((i-1)*6+j).FootPos0(k);
@@ -41,12 +42,13 @@ function kinemPlan = phasicKinematicPlan0 (feasGeomMap,Ts)
                 traj.sim.pos = pf*ones(1,size(traj.sim.t,2));
                 traj.sim.vel = zeros(1,size(traj.sim.t,2));
                 traj.sim.acc = zeros(1,size(traj.sim.t,2));           
-            elseif strcmp(feasGeomMap((i-1)*6+1).phase,'hex') && feasGeomMap((i)*6+j).st1_sw0 == 0 && k ~= 3      
+            elseif (strcmp(feasGeomMap((i-1)*6+1).phase,'hex')|| strcmp(feasGeomMap((i-1)*6+1).phase,'hexInit')) && feasGeomMap((i)*6+j).st1_sw0 == 0 && k ~= 3      
+                % Three legs are going up
                 t0 = feasGeomMap((i-1)*6+1).t;
                 tf = feasGeomMap((i)*6+1).t;
                 p0 = feasGeomMap((i-1)*6+j).FootPos0(k);
                 pf = feasGeomMap((i)*6+j).FootPos0(k);
-                v0 = 0;
+                v0 = 0; 
                 vf = 0;
                 traj.posParams = zeros(4,1);
                 traj.velParams = zeros(4,1);

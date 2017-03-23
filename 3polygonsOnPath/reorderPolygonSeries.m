@@ -10,12 +10,17 @@ function polygonSeries = reorderPolygonSeries (polygonSeries)
         polygonSeries(i).stCoords(:,ord) = copyPolygonSeries(i).stCoords(:,index);
         
         % Reorder swing feet numbers and coordinates
-        x = polygonSeries(i).swCoords(1,:);
-        y = polygonSeries(i).swCoords(2,:);
-        [ord, ord] = sort([angle(complex(x-mean(x),y-mean(y)))]);
-        index = 1:1:size(polygonSeries(i).swCoords,2);
-        copyPolygonSeries = polygonSeries;
-        polygonSeries(i).swFeet(ord) = copyPolygonSeries(i).swFeet(index);
-        polygonSeries(i).swCoords(:,ord) = copyPolygonSeries(i).swCoords(:,index);
+        if isempty(polygonSeries(i).swFeet)
+            polygonSeries(i).swFeet = [];
+            polygonSeries(i).swCoords = [];
+        else
+            x = polygonSeries(i).swCoords(1,:);
+            y = polygonSeries(i).swCoords(2,:);
+            [ord, ord] = sort([angle(complex(x-mean(x),y-mean(y)))]);
+            index = 1:1:size(polygonSeries(i).swCoords,2);
+            copyPolygonSeries = polygonSeries;
+            polygonSeries(i).swFeet(ord) = copyPolygonSeries(i).swFeet(index);
+            polygonSeries(i).swCoords(:,ord) = copyPolygonSeries(i).swCoords(:,index);
+        end
     end
 end

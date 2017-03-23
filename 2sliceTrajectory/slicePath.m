@@ -17,6 +17,11 @@ function slicedPath = slicePath (completePath,stride,timeRes)
     
     %Robot is supposed to be located at initial state imposed by input
     %path.
+    
+    % THIS FUNCTION GIVES THE ATTITUDE ALONG THE PATH, THIS ATTITUDE IS THE
+    % ANGLE IN ABSOLUTE FRAME OF THE VECTOR PERPENDICULAR TO THE PLANAR
+    % TRAJECTORY.
+    
     viaPos = [];
     viaVel = [];
     viaAcc = [];
@@ -41,7 +46,7 @@ function slicedPath = slicePath (completePath,stride,timeRes)
     [ynewdd, tempParams] = solvePoly(completePath.yParams,t,3);
     viaAcc = [viaAcc; [t, xnewdd, ynewdd]];
     % Notice: Atittude given back in radians
-    newAttitude = compAttitude( completePath, t );
+    newAttitude = compAttitude( completePath, t )-pi/2;
     viaAtt = [viaAtt; [t,newAttitude]];
     
     
@@ -66,8 +71,9 @@ function slicedPath = slicePath (completePath,stride,timeRes)
             [xnewdd, tempParams] = solvePoly(completePath.xParams,t,3);
             [ynewdd, tempParams] = solvePoly(completePath.yParams,t,3);
             viaAcc = [viaAcc; [t, xnewdd, ynewdd]];
-            % Notice: Atittude given back in radians
-            newAttitude = compAttitude( completePath, t );
+            % Notice: Atittude given back in radians (PERPENDICULAR TO PATH,
+            % therefore pi/2 substracted).
+            newAttitude = compAttitude( completePath, t )-pi/2;
             viaAtt = [viaAtt; [t,newAttitude]];
             x = xnew;
             y = ynew;

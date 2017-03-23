@@ -69,21 +69,22 @@ function polygonSeries = polygonSeriesOnPathnew (slicedPath,options)
             tripodPath = tripodFillnew (slicedPath, options.default.lengthTripod);
             % Check if FINITELY different initial state is desired
             if options.imposeInitialState.ON == 1
-                tempInitialState(1).type = tripodPath(2).type;
+                tempInitialState(1).t = options.imposeInitialState.t;
+                tempInitialState(1).type = options.imposeInitialState.type;
                 tempInitialState(1).stFeet = options.imposeInitialState.stFeet;
                 tempInitialState(1).swFeet = options.imposeInitialState.swFeet;
                 tempInitialState(1).COM = options.imposeInitialState.COM;
                 tempInitialState(1).COMdot = options.imposeInitialState.COMdot;
                 tempInitialState(1).COMddot = options.imposeInitialState.COMddot;
-                tempInitialState(1).att = option.imposeInitialState.att;
+                tempInitialState(1).att = options.imposeInitialState.att;
                 tempInitialState(1).stCoords = options.imposeInitialState.stCoords;
                 tempInitialState(1).swCoords = options.imposeInitialState.swFeet;
-                tripodPath = [tempInitialState,tripodPath];
+                tempInitialState(1).gait = 'initializedTripod';
+                tripodPath(1) = tempInitialState;
             else
                 %---- no action
             end
             polygonSeries = tripodPath;
-            polygonSeries(1).gait = 'tripod';
         elseif strcmp(options.default.gait, 'FTL')
             %-----
         end

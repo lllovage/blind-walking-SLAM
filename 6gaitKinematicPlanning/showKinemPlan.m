@@ -2,17 +2,16 @@ function showKinemPlan(geomPlanSimp,kinemPlan0)
     figure(2);
     if strcmp(kinemPlan0(1).gait,'tripod')
         % Assign each tripod a color
-        col(1) = 'r';
-        col(3) = 'r';
-        col(5) = 'r';
-        
-        col(2) = 'k';
-        col(4) = 'k';
-        col(6) = 'k';
+        col = 'rkrkrk';
+    elseif strcmp(kinemPlan0(1).gait,'initializedTripod')
+        col = 'gbgbgb';
     end
     
         %TBrpy_Breal = compTBrpy_Breal;
     for i=1:size(geomPlanSimp,2)-1
+        if i > 2
+            col = 'rkrkrk';
+        end
         % Extract phase from geometric plan (Notice we need lengths in mm!)
         phase1 = geomPlanSimp(i);
         phase2 = geomPlanSimp(i+1);

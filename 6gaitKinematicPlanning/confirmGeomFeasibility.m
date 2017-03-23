@@ -6,6 +6,6 @@ function feasVal = confirmGeomFeasibility( feasGeomMap )
                    [feasGeomMap(:).Fl3]', [feasGeomMap(:).Fa1]', ...
                    [feasGeomMap(:).Fa2]', [feasGeomMap(:).Fa3]']));
     if feasVal ~=0
-       warning('Complete feasibility value different to 0. Some feasibility flag must have raised. Consider revising position constraints'); 
+       warning(['confirmGeomFeasibility: Complete feasibility value different to 0. geomFeasVal = ' num2str(feasVal)]); 
     end
 end
