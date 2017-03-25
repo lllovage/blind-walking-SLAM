@@ -5,7 +5,7 @@ function [m,b,flag,xinf] = lineEquation( fi,fi1 )
     x2 = fi1(1);
     y1 = fi(2);
     y2 = fi1(2);
-    if abs(x2) > (abs(x1)+ epsilon) || abs(x2) < (abs(x1)- epsilon)
+    if (x2) > ((x1)+ epsilon) || (x2) < ((x1)- epsilon)
         m = (y2-y1)/(x2-x1);
         b = -m*x1 + y1;
         flag = 0;

@@ -1,4 +1,4 @@
-function [geomPlan] = tripodGeometric (polygonSeries, heights, options)
+function [geomPlan, polygonSeries] = tripodGeometric (polygonSeries, heights, options)
     % Gait planning for two consecutive support patterns given as a
     % PolygonSeries
     % -> If mod (numberPatterns,2) ~= 0 then the function plans the last 
@@ -53,11 +53,11 @@ function [geomPlan] = tripodGeometric (polygonSeries, heights, options)
         % position).--------------------------------------------------
         addition = zeros(4,1);
         addition(3,:) = epsilon;
-
+        userHeights = heights;
         %Prepare heights vector
-        if isscalar(heights)
-            heights = repmat(heights,size(polygonSeries,2),1);%---------------
-        elseif size(heights,1) == 12 && size(heights,2) == 1
+        if isscalar(userHeights)
+            heights = repmat(userHeights,size(polygonSeries,2),1);%---------------
+        elseif size(userHeights,1) == size(polygonSeries,2) && size(heights,2) == 1
             %-----
         else 
             warning('tripodCycle: Bad dimension passed in heights vector, default constant height is forced in the computation.')
@@ -96,21 +96,52 @@ function [geomPlan] = tripodGeometric (polygonSeries, heights, options)
             temp(2).COM = polygonSeries(1).COM;
             temp(2).COMdot = polygonSeries(1).COMdot;
             temp(2).COMddot = polygonSeries(1).COMddot;
-            temp(2).stFeet = find(~ismember(polygonSeries(1).stFeet, polygonSeries(2).stFeet));
-            for j=1:size(polygonSeries(2).stFeet,1)
-                k = polygonSeries(2).stFeet(j);
-                eval(['temp(2).c', num2str(k), '= polygonSeries(1).stCoords(:,find(polygonSeries(1).stFeet == ', num2str(k), '));' ]);
-                eval(['temp(2).c', num2str(k) ,'dot = [0 0 0];']);
-            end  
-            temp(2).swFeet = find(ismember(polygonSeries(1).stFeet, polygonSeries(2).stFeet));
+            newStCoords = [];
+            newSwCoords = [];
             for j=1:size(polygonSeries(2).swFeet,1)
                 k = polygonSeries(2).swFeet(j);
+                temp(2).stFeet(j,1) = k;
+                eval(['temp(2).c', num2str(k), '= polygonSeries(1).stCoords(:,find(polygonSeries(1).stFeet == ', num2str(k), '));' ]);
+                eval(['temp(2).c', num2str(k) ,'dot = [0 0 0];']);
+                newStCoords = [newStCoords, polygonSeries(1).stCoords(:,find(polygonSeries(1).stFeet == k))];
+            end
+            
+            for j=1:size(polygonSeries(2).stFeet,1)
+                k = polygonSeries(2).stFeet(j);
+                temp(2).swFeet(j,1) = k;
                 eval(['temp(2).c', num2str(k), '= polygonSeries(1).stCoords(:,find(polygonSeries(1).stFeet == ', num2str(k), ')) + addition;' ]);
                 eval(['temp(2).c', num2str(k) ,'dot = [0 0 0];']);
-            end  
+                newSwCoords = [newSwCoords, polygonSeries(1).stCoords(:,find(polygonSeries(1).stFeet == k))+ addition];
+            end 
             temp(2).angles = [0, 0, polygonSeries(1).att];
             temp(2).height = 548.90171991133911/1000;
             initialized = 1;
+            % Fill in new initial state in polygonSeries structure
+            newPolygon.t = temp(2).t;
+            newPolygon.type = 'R';
+            newPolygon.stFeet = temp(2).stFeet;
+            newPolygon.swFeet = temp(2).swFeet;
+            newPolygon.COM = temp(2).COM;
+            newPolygon.COMdot = temp(2).COMdot;
+            newPolygon.COMddot = temp(2).COMddot;
+            newPolygon.att = temp(2).angles(3);
+            newPolygon.stCoords = newStCoords;
+            newPolygon.swCoords = newSwCoords;
+            newPolygon.gait = [];
+            newPolygon = reorderPolygonSeries (newPolygon);
+            % Reinitialize instrumental matrices: polygonSeries, polygon
+            % extraction and heights
+            polygonSeries = [polygonSeries(1), newPolygon, polygonSeries(2:end)];
+            [stPolygons, swPolygons] = polygonSeries2plainPolygons (polygonSeries);
+            if isscalar(userHeights)
+                heights = repmat(userHeights,size(polygonSeries,2),1);%---------------
+            elseif size(userHeights,1) == size(polygonSeries,2) && size(heights,2) == 1
+            %-----
+            else 
+                warning('tripodCycle: Bad dimension passed in heights vector, default constant height is forced in the computation.')
+                heights = 0.5; %--------------------------------------------------
+                heights = repmat(heights,size(polygonSeries,2),1);
+            end
         end
         geomPlan = [geomPlan, temp];
         % Reinitialize time of the whole series due to initial transition
@@ -118,12 +149,19 @@ function [geomPlan] = tripodGeometric (polygonSeries, heights, options)
         if initialized == 1
             initDeltaTime = timeHomeTripod;
             start = 2;
+            % Actualize polygonSeries instrumental time
+            for i = 3:size(polygonSeries,2)
+                %Home position to tripod adaptation
+                %time------------------------------------------------------
+            polygonSeries(i).t = polygonSeries(i).t + initDeltaTime+(initDeltaTime*4/2);
+            end
         else
             initDeltaTime = 0;
             start = 1;
         end
         %Start tripod recursion
         for i=start:size(polygonSeries,2)-1
+            
             % Get intersection of two consecutive polygons in the series
             poly1 = stPolygons(i);
             poly2 = stPolygons(i+1);
@@ -132,7 +170,21 @@ function [geomPlan] = tripodGeometric (polygonSeries, heights, options)
             % Fill in intrmediate phases. Notice "Number" field allows to see
             % FROM which polygon each of the 5 phases corresponds.
             % 1. First polygon
-            temp(1).t = polygonSeries(i).t + initDeltaTime;
+            if initialized == 1 && i == start
+                initDeltaTime = timeHomeTripod;
+            elseif initialized == 1 && i ~= start
+                initDeltaTime = 0;
+            elseif initialized == 0 && i == start
+                initDeltaTime = 0;
+            else
+                initDeltaTime = 0;
+            end
+            
+            % Get time fractions between stance changes and advance
+            sigma = 1.4;%-------------------------!!!!!!!!!!! tune for accomplishing VEL and ACC constraints
+            tz = (polygonSeries(i+1).t -polygonSeries(i).t)/(2*(1+sigma));
+            td = sigma*tz;
+            temp(1).t = polygonSeries(i).t;
             temp(1).number = i;
             temp(1).phase = 'p1';
             temp(1).COM = polygonSeries(i).COM;
@@ -156,9 +208,8 @@ function [geomPlan] = tripodGeometric (polygonSeries, heights, options)
             end
             temp(1).angles = [0, 0, polygonSeries(i).att];
             temp(1).height = heights(i);
-
             % 2. Polygon intersection from first polygon
-            temp(2).t = polygonSeries(i).t + (polygonSeries(i+1).t-polygonSeries(i).t)*(1/4) + initDeltaTime;
+            temp(2).t = polygonSeries(i).t + td;
             temp(2).number = i;
             temp(2).phase = 'pInt';
             temp(2).COM = intPoly.centroid(1:2)';
@@ -171,6 +222,7 @@ function [geomPlan] = tripodGeometric (polygonSeries, heights, options)
                 eval(['temp(2).c', num2str(k), 'dot= temp(1).c',num2str(k),'dot;' ]);
             end       
             temp(2).swFeet = polygonSeries(i).swFeet;
+            
             for j=1:size(polygonSeries(i).swFeet,1)
                 k = polygonSeries(i).swFeet(j);
                 eval(['temp(2).c', num2str(k), '= polygonSeries(i+1).stCoords(:,find(polygonSeries(i+1).stFeet == ', num2str(k), '))+addition;' ]);
@@ -180,7 +232,7 @@ function [geomPlan] = tripodGeometric (polygonSeries, heights, options)
             temp(2).height = (heights(1)+heights(2))/2;
 
             %3. Hexagon stance (3 old swing feet down)
-            temp(3).t = polygonSeries(i).t + (polygonSeries(i+1).t-polygonSeries(i).t)*(2/4) + initDeltaTime;
+            temp(3).t = polygonSeries(i).t + td + tz;
             temp(3).number = i;
             temp(3).phase = 'hex';
             temp(3).COM = temp(2).COM;
@@ -202,7 +254,7 @@ function [geomPlan] = tripodGeometric (polygonSeries, heights, options)
             temp(3).height = temp(2).height;
 
             %4. Intersection polygon to second polygon (3 new swing feet up)
-            temp(4).t = polygonSeries(i).t + (polygonSeries(i+1).t-polygonSeries(i).t)*(3/4) + initDeltaTime;
+            temp(4).t = polygonSeries(i).t + td + tz + tz;
             temp(4).number = i;
             temp(4).phase = 'pInt3up';
             temp(4).COM = temp(3).COM;
@@ -225,7 +277,7 @@ function [geomPlan] = tripodGeometric (polygonSeries, heights, options)
             temp(4).height = temp(3).height;
 
             %5. Second polygon reached
-            temp(5).t = polygonSeries(i).t + (polygonSeries(i+1).t-polygonSeries(i).t)*(4/4) + initDeltaTime;
+            temp(5).t = polygonSeries(i).t + td + tz + tz + td;
             temp(5).number = i;
             temp(5).phase = 'p2';
             temp(5).COM = polygonSeries(i+1).COM;
@@ -245,11 +297,17 @@ function [geomPlan] = tripodGeometric (polygonSeries, heights, options)
             end
             temp(5).swFeet = temp(4).swFeet;
             temp(5).angles = [0, 0, polygonSeries(i+1).att];
-            temp(5).height = heights(i+1);       
+            temp(5).height = heights(i+1);
+   
             geomPlan = [geomPlan, temp];
+            
         end
         if initialized == 1
             geomPlan(1).gait = 'initializedTripod';
+            % Take away useless state in the modified plan
+            geomPlan(2).number = start;
+            geomPlan(2).phase = 'p1';
+            geomPlan = [geomPlan(1:2), geomPlan(4:end)];
         else
             geomPlan(1).gait = 'tripod';
         end

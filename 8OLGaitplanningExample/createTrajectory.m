@@ -26,7 +26,7 @@ cx(2).value = 2*r-r*cos(pi/6);      cy(2).value = r*sin(pi/6);
 %..................................................................
 cx(2).time = 6*tVia;                cy(2).time = 6*tVia;
 cx(2).type = 'p';                   cy(2).type = 'p';
-cx(2).value = 2*r;                  cy(2).value = 0;
+cx(2).value = 2*r;                  cy(2).value = 0;             
 
 xOut = genTraj (cx);                
-yOut = genTraj (cy);
+yOut = genTraj (cy);              

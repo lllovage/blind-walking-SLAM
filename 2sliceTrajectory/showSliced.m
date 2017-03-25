@@ -13,7 +13,16 @@ function showSliced(completePath, slicedPath)
     end
     
     figure(1);
+    clf
     plot(x,y,'b'); hold on;
     plot(slicedPath.pos(:,2),slicedPath.pos(:,3),'rx')
+    hold on;
+    for i=1:size(slicedPath.att,1)
+        T0_Brpy = compT0_Brpy ( [slicedPath.pos(i,2),slicedPath.pos(i,3)],[0,0,slicedPath.att(i,2)], 0.67 );
+        vec0 = T0_Brpy*[0.2;0;0;1];
+        p0 = [slicedPath.pos(i,2), slicedPath.pos(i,3)];
+        p1 = [vec0(1), vec0(2)];
+        vectarrow(p0,p1);
+    end
     
 end

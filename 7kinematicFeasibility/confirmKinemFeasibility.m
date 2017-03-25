@@ -16,9 +16,9 @@ function boundKinemMap = confirmKinemFeasibility( boundKinemMap )
   boundKinemMap.feasValVel = feasValVel;
   boundKinemMap.feasValAcc = feasValAcc;
     if feasValVel ~=0
-       warning('Velocity feasibility value different to 0. Consider revising velocity constraints or lowering velocity where maximum');
+       warning(['feasValVel = ', num2str(feasValVel)]);
     end
     if feasValAcc ~=0
-       warning('Acceleration feasibility value different to 0. Consider revising accelerations or lowering accelerations where maximum');
+       warning(['feasValAcc = ', num2str(feasValAcc)]);
     end
 end

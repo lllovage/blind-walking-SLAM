@@ -47,6 +47,7 @@ for i=1:size(samples,1)
     else
         temp = temp + samples(i-1);
     end
+    t(:,temp+1:temp+samples(i)) = [feasKinemMap(resFinRanges(i,1):resFinRanges(i,2)).t];
     leg1(:,temp+1:temp+samples(i)) = [feasKinemMap(resFinRanges(i,1):resFinRanges(i,2)).l];
     leg2(:,temp+1:temp+samples(i)) = [feasKinemMap(resFinRanges(i,3):resFinRanges(i,4)).l];
     leg3(:,temp+1:temp+samples(i)) = [feasKinemMap(resFinRanges(i,5):resFinRanges(i,6)).l];
@@ -96,7 +97,7 @@ flags.Facc5m = sum(leg5dd(1,:)<-800)+sum(leg5dd(2,:)<-800)+sum(leg5dd(3,:)<-800)
 flags.Facc6p = sum(leg6dd(1,:)>800)+sum(leg6dd(2,:)>800)+sum(leg6dd(3,:)>800);
 flags.Facc6m = sum(leg6dd(1,:)<-800)+sum(leg6dd(2,:)<-800)+sum(leg6dd(3,:)<-800);
 
-boundKinemMap.t = [feasKinemMap(:).t];
+boundKinemMap.t = t;
 boundKinemMap.l1 = leg1;
 boundKinemMap.l2 = leg2;
 boundKinemMap.l3 = leg3;
@@ -104,17 +105,17 @@ boundKinemMap.l4 = leg4;
 boundKinemMap.l5 = leg5;
 boundKinemMap.l6 = leg6;
 boundKinemMap.l1d = leg1d;
-boundKinemMap.l2d = leg1d;
-boundKinemMap.l3d = leg1d;
-boundKinemMap.l4d = leg1d;
-boundKinemMap.l5d = leg1d;
-boundKinemMap.l6d = leg1d;
+boundKinemMap.l2d = leg2d;
+boundKinemMap.l3d = leg3d;
+boundKinemMap.l4d = leg4d;
+boundKinemMap.l5d = leg5d;
+boundKinemMap.l6d = leg6d;
 boundKinemMap.l1dd = leg1dd;
-boundKinemMap.l2dd = leg1dd;
-boundKinemMap.l3dd = leg1dd;
-boundKinemMap.l4dd = leg1dd;
-boundKinemMap.l5dd = leg1dd;
-boundKinemMap.l6dd = leg1dd;
+boundKinemMap.l2dd = leg2dd;
+boundKinemMap.l3dd = leg3dd;
+boundKinemMap.l4dd = leg4dd;
+boundKinemMap.l5dd = leg5dd;
+boundKinemMap.l6dd = leg6dd;
 boundKinemMap.flags = flags;
 % INOPTIMAL CODE
 % for i=1:size(samples,1) % transitions

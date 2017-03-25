@@ -1,25 +1,27 @@
 %% Create some trajectory in absolute space
 clear;clc;
-tVia = 10; % seconds between vias
+tVia = 15; % seconds between vias
 r = 1.3; % in meters
 createTrajectory
+plot(xOut.sim.pos,yOut.sim.pos)
+print('trajectory','-dpng')
 % Slice the trajectory in equally separated chunks (norm2)
-stride = 0.25; % In meters-----------------------------------------------
+stride = 0.24; % In meters-----------------------------------------------
 desiredHeigh = 0.67; % In meters------------------------------------------
 Ts = 0.01; %In seconds----------------------------------------------------
 timeRes = 0.001;   % In seconds
 % Follow formalism [1 t t^2 t^3 ... t^n]
 completePath.xParams = xOut.posParams;
 completePath.yParams = yOut.posParams;
-completePath.zParams = [0.65];
+completePath.zParams = [desiredHeigh];
 completePath.aParams = [0];
 completePath.bParams = [0];
 completePath.gParams = []; % Following the curve (to be given by input planner)
 completePath.t0 = 0; % In seconds
-completePath.tf = 60;
+completePath.tf = tVia*6;
 slicedPath = slicePath (completePath,stride,timeRes);
 showSliced(completePath,slicedPath)
-
+print('trajectorySliced','-dpng')
 %% Fill in slicedPath with tripods
 options.default.ON = 1;
 options.default.gait = 'tripod';
@@ -58,17 +60,19 @@ polygonSeries = polygonSeriesOnPathnew (slicedPath,options);
 % Put the vertices in counterclockwise order (this step ensures
 % compatibility with polygon functions created).
 polygonSeries = reorderPolygonSeries(polygonSeries);
-showPolygonSeries(polygonSeries)
-
+%showPolygonSeries(polygonSeries)
 %% Get complete geometric gait plan
 options.default = 1;
 % Otherwise need
 % options.xParams, options.yParams, options.zParams, options.angles in
 % which height will be overriden.
-geomPlan = tripodGeometric(polygonSeries,desiredHeigh,options);
+[geomPlan,polygonSeries] = tripodGeometric(polygonSeries,desiredHeigh,options);
+showPolygonSeries(polygonSeries)
+print('trajectoryPolygons','-dpng')
+%%
 geomPlanSimp = simplifyGeomPlan(geomPlan);
 showPolygonIntersections (geomPlanSimp);
-
+print('trajectoryIntersections','-dpng')
 % Compute feasibility of geometric plan
 feasGeomMap = feasibilityGeometric( geomPlanSimp );
 %% Kinematic plan
@@ -79,9 +83,10 @@ kinemPlan = phasicKinematicPlan0 (feasGeomMap,Ts);
 % Visualize trajectory planning (ONLY AVAILABLE FOR KINEMATIC PLAN IN
 % ABSOLUTE FRAME)
 showKinemPlan(geomPlanSimp,kinemPlan);
+print('kinemPlan','-dpng')
 %%
 %Determine geometrical feasibility for the whole trajectory
-feasKinemMap = feasibilityKinematic(kinemPlan0);
+feasKinemMap = feasibilityKinematic(kinemPlan);
 boundKinemMap = kinemBound (feasKinemMap);
 boundKinemMap = confirmKinemFeasibility( boundKinemMap );
-showBranchSpeeds();
+showBranchKinem(boundKinemMap);
