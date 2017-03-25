@@ -5,9 +5,10 @@ function [res, newParams] = solvePoly(params,t,mode)
     end
     if mode == 1
         %------
-        tMatrix = 1;
+        tMatrix = zeros(size(params,1),1);
+        tMatrix(1) = 1;
         for i=1:size(params,1)-1
-            tMatrix = [tMatrix; t^i];
+            tMatrix(i+1) = t^i;
         end
         res = params'*tMatrix;
         newParams = params;
@@ -19,9 +20,10 @@ function [res, newParams] = solvePoly(params,t,mode)
                 params(i+1) = i*params(i+1);
             end
             %------
-            tMatrix = [0;1];
+            tMatrix = zeros(size(params,1),1);
+            tMatrix(1:2) = [0;1];
             for i=1:size(params,1)-2
-                tMatrix = [tMatrix; t^i];
+                tMatrix(i+2) = t^i;
             end
             res = params'*tMatrix;
             newParams = [params(2:end);0];
@@ -42,9 +44,10 @@ function [res, newParams] = solvePoly(params,t,mode)
                 params(i+2) = i*params(i+2);
             end
             %------
-            tMatrix = [1;1;1];
+            tMatrix = zeros(size(params,1),1);
+            tMatrix(1:3) = [1;1;1];
             for i=1:size(params,1)-3
-                tMatrix = [tMatrix; t^i];
+                tMatrix(i+3) = t^i;
             end
             res = params'*tMatrix;
             newParams = [params(3:end);0];

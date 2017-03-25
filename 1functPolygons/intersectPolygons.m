@@ -4,8 +4,15 @@ function [intPolygon, tooFar] = intersectPolygons ( polygons )
     %one intersection is found (polygons touch each other on a vertex) then
     %a null intPolygon is returned and tooFar 
     %1. Extract lines from polygons
-    lines = [];
-    ranges = [];
+    maxNumFeet = 0;
+    for i = 1:size(polygons,1)
+        if maxNumFeet > size(polygons(i).coords,1)
+        else
+            maxNumFeet=size(polygons(i).coords,1);
+        end      
+    end
+    lines = zeros(size( polygons,1 ),maxNumFeet,4);
+    ranges = zeros(size( polygons,1 ),maxNumFeet,2,2);
     for i = 1:size( polygons,1 ) % Number of polygons
         stFeet = size(polygons(i).coords,1); % Number of vertices per polygon
         for j = 1:stFeet % Foot in consideration
@@ -17,6 +24,7 @@ function [intPolygon, tooFar] = intersectPolygons ( polygons )
                 fi = polygons(i).coords(j,:);
                 fi1 = polygons(i).coords(1,:);
             end
+            
             [m,b,flag,xinf] = lineEquation(fi,fi1); % (Polygon, line number, [m,b,flag])
             % Notice ordering: lines(polygon, starting foot, [m, b, flag,xinf])
             % xinf-> If flag=1, xinf contains the value of x at which
@@ -33,7 +41,7 @@ function [intPolygon, tooFar] = intersectPolygons ( polygons )
     end
     % 3. Mathematical intersection of lines of 2 different polygons
     % Notice ordering: intersections(lineP1,lineP2,[x,y,noInt])
-    intersections = [];
+    intersections = zeros(size(polygons(1).coords,1),size(polygons(2).coords,1),3);
     for i = 1:size(polygons(1).coords,1) %lines first polygon
         for j = 1:size(polygons(2).coords,1) % lines second polygon
             % Extract lines to intersect
@@ -49,7 +57,8 @@ function [intPolygon, tooFar] = intersectPolygons ( polygons )
     %4. Filter out useful intersections
     % Notice ordering: ranges(polygon, starting foot, 1 or 2, [min,max])
                      % intersections(lineP1,lineP2,[x,y,noInt])
-    coords = [];
+    coords = zeros(1000,1,2);
+    count = 0;
     for i =  1:size(polygons(1).coords,1) % lines first polygon
         for j =  1:size(polygons(2).coords,1) % lines second polygon
             if (intersections(i,j,1) <= ranges(1,i,1,2)) && (ranges(1,i,1,1) <= intersections(i,j,1)) && ...
@@ -57,10 +66,13 @@ function [intPolygon, tooFar] = intersectPolygons ( polygons )
                (intersections(i,j,1) <= ranges(2,j,1,2)) && (ranges(2,j,1,1) <= intersections(i,j,1)) && ...
                (intersections(i,j,2) <= ranges(2,j,2,2)) && (ranges(2,j,2,1) <= intersections(i,j,2)) && ...
                (intersections(i,j,3) == 0)
-               coords = [coords; intersections(i,j,1:2)];
+               %coords = [coords; intersections(i,j,1:2)];
+               count = count+1;
+               coords(count,1,1:2) = intersections(i,j,1:2);
             end
         end        
     end
+    coords = coords(1:count,:,:);
     %5. Add corners of existing polygons inside other polygons
     for i = 1:size(polygons,1)
         % Separate polygons from actual one to analyze insident corners
