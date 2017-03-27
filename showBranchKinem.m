@@ -16,6 +16,8 @@ figure(4)
 clf
 plot(boundKinemMap.t(1:end-1), boundKinemMap.l1d(1,:),'r')
 hold on;
+plot(boundKinemMap.t(1:end-2),230*(ones(size(boundKinemMap.t(1:end-2)))),'r--')
+plot(boundKinemMap.t(1:end-2),-230*(ones(size(boundKinemMap.t(1:end-2)))),'r--')
 plot(boundKinemMap.t(1:end-1), boundKinemMap.l1d(2,:),'r')
 plot(boundKinemMap.t(1:end-1), boundKinemMap.l1d(3,:),'r')
 plot(boundKinemMap.t(1:end-1), boundKinemMap.l3d(1,:),'g')
@@ -29,6 +31,8 @@ figure(5)
 clf
 plot(boundKinemMap.t(1:end-2), boundKinemMap.l1dd(1,:),'r')
 hold on;
+plot(boundKinemMap.t(1:end-2),800*(ones(size(boundKinemMap.t(1:end-2)))),'r--')
+plot(boundKinemMap.t(1:end-2),-800*(ones(size(boundKinemMap.t(1:end-2)))),'r--')
 plot(boundKinemMap.t(1:end-2), boundKinemMap.l1dd(2,:),'r')
 plot(boundKinemMap.t(1:end-2), boundKinemMap.l1dd(3,:),'r')
 plot(boundKinemMap.t(1:end-2), boundKinemMap.l3dd(1,:),'g')
@@ -55,6 +59,8 @@ figure(7)
 clf
 plot(boundKinemMap.t(1:end-1), boundKinemMap.l2d(1,:),'m')
 hold on;
+plot(boundKinemMap.t(1:end-2),230*(ones(size(boundKinemMap.t(1:end-2)))),'r--')
+plot(boundKinemMap.t(1:end-2),-230*(ones(size(boundKinemMap.t(1:end-2)))),'r--')
 plot(boundKinemMap.t(1:end-1), boundKinemMap.l2d(2,:),'m')
 plot(boundKinemMap.t(1:end-1), boundKinemMap.l2d(3,:),'m')
 plot(boundKinemMap.t(1:end-1), boundKinemMap.l4d(1,:),'k')
@@ -68,6 +74,8 @@ figure(8)
 clf
 plot(boundKinemMap.t(1:end-2), boundKinemMap.l2dd(1,:),'m')
 hold on;
+plot(boundKinemMap.t(1:end-2),800*(ones(size(boundKinemMap.t(1:end-2)))),'r--')
+plot(boundKinemMap.t(1:end-2),-800*(ones(size(boundKinemMap.t(1:end-2)))),'r--')
 plot(boundKinemMap.t(1:end-2), boundKinemMap.l2dd(2,:),'m')
 plot(boundKinemMap.t(1:end-2), boundKinemMap.l2dd(3,:),'m')
 plot(boundKinemMap.t(1:end-2), boundKinemMap.l4dd(1,:),'k')

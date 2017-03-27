@@ -142,8 +142,9 @@ function [geomPlan, polygonSeries] = tripodGeometric (polygonSeries, heights, op
                 heights = 0.5; %--------------------------------------------------
                 heights = repmat(heights,size(polygonSeries,2),1);
             end
+            geomPlan = [geomPlan, temp];
         end
-        geomPlan = [geomPlan, temp];
+        
         % Reinitialize time of the whole series due to initial transition
         % of imposed initialized state.
         if initialized == 1

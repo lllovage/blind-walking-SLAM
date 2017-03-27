@@ -82,4 +82,4 @@ showKinemPlan(geomPlanSimp,kinemPlan);
 feasKinemMap = feasibilityKinematic(kinemPlan);
 boundKinemMap = kinemBound (feasKinemMap);
 boundKinemMap = confirmKinemFeasibility( boundKinemMap );
-showBranchSpeeds();
+showBranchKinem(boundKinemMap)
