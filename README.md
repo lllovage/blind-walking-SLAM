@@ -20,6 +20,16 @@ stages of research and the general robot kinematic model is deducted. These mode
 as part of a gait generation chain computing the geometric quantities of the gait, feasibility and
 boundedness checks.
 
+## 摘要
+从移动性能角度来看,步行机器人是一个很好的解决方案,但是需要更加复杂的控制器以具
+备适应地形的不确定性。本论文致力于移动机器人研究,在ECN,SJTU和UG的共同指导下完
+成。论文中提出一种控制策略使得用于核电站压力容器焊接的并联六足机器人可以在平地上行
+走,其最大步长为0.25m,并且进一步扩展其性能使得该机器人能在不平的地面上行走。
+
+最后,基于确定的系统性能需求提出了可能的系统扩展方向。提出了稳定性问题的逆向解
+(即,对于某一允许的最小稳定裕度,机器人能够适应更大的不平整度),并在此基础上给出
+了通过外部传感器反馈信号及在线调整参数修正机器人行为的可能性。
+
 ## Code
 
 The code is separated in several folders, each accomplishing an important part of the estimation scheme. 
