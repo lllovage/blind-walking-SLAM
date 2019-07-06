@@ -46,7 +46,7 @@ The code is separated in several folders, each accomplishing an important part o
 ![alt text](kinemPlan.png)
 
 At the end, extra mathematical concepts were designed and put into operation in order to be able to use this even terrain scheme into the non even case. Considering torsion of the robot and the best possible linear estimation of the future terrain  it was possible to generate a projective interface capable of warping the results of the previously mentioned approach into unknown situations, permitting the robot to react and take decisions online for the stabilizatio nof its body given new challenges. A depiction can be seen here, in which the orientation of the body is stabilized according to the inertial frame.
-![alt text](T1sideatt.png) ![alt text](kinemPlan.png)
+![alt text](T1KF1.png) ![alt text](T1sideatt.png)
 
 ## Installation
 Given that the code is written in Matlab, this is the only requirement needed. The real time code was generated through a Simulink scheme .
