@@ -33,7 +33,7 @@ The code is separated in several folders, each accomplishing an important part o
 - Gait kinematic planning: Allows for the computation of velocities needed to control the feet in a certain manner.
 - Kinematic feasibility: Speed checks are performed to allow overloading the effectors.
 - Open Loop Gait Planning Example: An example of the plan for even terrain.
-![alt text](kinematicPlan.png)
+![alt text](kinemPlan.png)
 
 ## Installation
 Given that the code is written in Matlab, this is the only requirement needed. The real time code was generated through a Simulink scheme .
