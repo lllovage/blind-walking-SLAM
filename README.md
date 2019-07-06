@@ -1,5 +1,7 @@
 # Blind Walking SLAM Algorithm
 
+![alt text](octopus.png)
+
 ## Motivation 
 Walking robots represent a very good solution from the perspective of mobility but require of
 more elegant (and complex) controllers capable of dealing with terrain uncertainty. This thesis
@@ -23,12 +25,15 @@ boundedness checks.
 The code is separated in several folders, each accomplishing an important part of the estimation scheme. 
 - Functional Polygons: Low level functions dealing with 2D polygon sectioning and several capabilities like centroid and area calculation.
 - Slice Trajectory: A given polynomial trajectory can be sliced inindependent slices using at least a stride parameter to allow for the general setpoints of movement of the robot to be computed.
+![alt text](trajectorySliced.png)
 - Polygons on path: Functions used to decide how to set the polygons alot the pat, the corners of which belong to the grounded feet of the robot.
+![alt text](trajectoryPolygons.png)
 - Gait geometric planning: General planning of the movement in which the movement among contiguos polygons is separated in several differenciated phases to be followed by the robot.
 - Feasibility geometric plan: Helps to cheack for the feasibility of the plan until this step of computation.
 - Gait kinematic planning: Allows for the computation of velocities needed to control the feet in a certain manner.
 - Kinematic feasibility: Speed checks are performed to allow overloading the effectors.
 - Open Loop Gait Planning Example: An example of the plan for even terrain.
+![alt text](kinematicPlan.png)
 
 ## Installation
 Given that the code is written in Matlab, this is the only requirement needed. The real time code was generated through a Simulink scheme .
